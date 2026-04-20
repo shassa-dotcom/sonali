@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sonali — UX/UI Designer</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Brand palette: magenta #9E0D85 · deep black #150708 · warm amber #F39F5F */
+  --coral:     #9E0D85;
+  --coral-lt:  #C940AA;
+  --coral-pale:#F5D0EF;
+  --gold:      #F39F5F;
+  --gold-lt:   #F7B87A;
+  --gold-pale: #FEF0E3;
+  --plum:      #150708;
+  --plum-mid:  #3A1020;
+  --plum-lt:   #7A3A5A;
+  --cream:     #FBF8F6;
+  --warm-white:#F5EEE8;
+  --mist:      #EDD8E8;
+  --ink:       #150708;
+  --muted:     #7A4A5A;
+  --grad-logo: linear-gradient(135deg, #9E0D85 0%, #C940AA 35%, #F39F5F 75%, #F7B87A 100%);
+  --grad-warm: linear-gradient(135deg, #C940AA 0%, #F39F5F 100%);
+  --grad-deep: linear-gradient(135deg, #150708 0%, #3A1020 100%);
+  --shadow-warm: 0 20px 60px rgba(158,13,133,.18);
+  --shadow-gold: 0 20px 60px rgba(243,159,95,.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  cursor: none;
+  overflow-x: hidden;
+}
+::selection { background: var(--coral-pale); color: var(--coral); }
+
+/* ── Fluid Wavy Cursor ── */
+canvas#cursor-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+.cursor-dot {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--coral);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%,-50%);
+  transition: background .2s, transform .15s;
+  mix-blend-mode: multiply;
+}
+body.hovering .cursor-dot {
+  background: var(--gold);
+  transform: translate(-50%,-50%) scale(2.2);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background: var(--warm-white); }
+::-webkit-scrollbar-thumb { background: var(--grad-logo); border-radius:3px; }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 1.1rem 5%;
+  background: rgba(251,248,246,.90);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(158,13,133,.12);
+  transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 4px 40px rgba(212,100,122,.1); }
+.nav-logo img { height:36px; width:auto; display:block; }
+.nav-links { display:flex; gap:2.4rem; list-style:none; }
+.nav-links a {
+  text-decoration:none; color:var(--plum-mid);
+  font-size:.88rem; font-weight:500; letter-spacing:.06em;
+  position:relative; padding-bottom:4px; transition:color .2s;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1.5px;
+  background: var(--grad-logo); transform:scaleX(0);
+  transform-origin:right; transition:transform .3s;
+}
+.nav-links a:hover { color:var(--coral); }
+.nav-links a:hover::after { transform:scaleX(1); transform-origin:left; }
+
+/* ── Buttons ── */
+.btn {
+  display:inline-block; padding:.82rem 2rem;
+  border-radius:50px; font-size:.88rem; font-weight:600;
+  text-decoration:none; letter-spacing:.05em;
+  transition: transform .2s, box-shadow .2s;
+  position:relative; overflow:hidden; font-family:'Outfit',sans-serif;
+  border: none;
+}
+.btn-primary {
+  background: var(--grad-logo); color:#fff;
+  box-shadow: 0 8px 28px rgba(212,100,122,.35);
+}
+.btn-primary:hover { transform:translateY(-3px); box-shadow: 0 14px 40px rgba(212,100,122,.45); }
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--coral);
+  color: var(--coral);
+}
+.btn-ghost:hover { background:var(--coral-pale); transform:translateY(-3px); }
+
+/* ── Sections ── */
+section { padding: 110px 8%; }
+.tag-pill {
+  display:inline-block;
+  font-size:.7rem; font-weight:600; letter-spacing:.2em;
+  text-transform:uppercase; padding:.35em 1em;
+  border-radius:30px; margin-bottom:1.3rem;
+  background: var(--coral-pale); color: var(--coral);
+}
+
+/* ═══ HERO ═══ */
+#home {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+  align-items: center; gap: 3rem;
+  padding-top: 130px;
+  position: relative; overflow: hidden;
+}
+.hero-bg-orb {
+  position:absolute; border-radius:50%;
+  filter:blur(90px); pointer-events:none; opacity:.22;
+}
+.orb1 { width:550px; height:550px; background:var(--coral); top:-80px; right:-80px; }
+.orb2 { width:380px; height:380px; background:var(--gold); bottom:-60px; left:5%; animation:floatOrb 9s ease-in-out infinite; }
+.orb3 { width:200px; height:200px; background:var(--coral-lt); top:40%; left:40%; animation:floatOrb 7s ease-in-out infinite reverse; }
+@keyframes floatOrb { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-28px) scale(1.06);} }
+
+.hero-text { position:relative; z-index:2; }
+.hero-hi {
+  font-size:.82rem; font-weight:500; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:.8rem;
+  animation: riseUp .8s .1s both;
+}
+.hero-logo-name {
+  margin-bottom:.4rem;
+  animation: riseUp .8s .25s both;
+}
+.hero-logo-name img { height:72px; width:auto; }
+.hero-role {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  font-style:italic; font-weight:300;
+  color:var(--plum-mid); margin-bottom:1.6rem;
+  animation: riseUp .8s .4s both;
+}
+.hero-desc {
+  font-size:.97rem; color:var(--muted); line-height:1.85;
+  max-width:500px; margin-bottom:2.4rem;
+  animation: riseUp .8s .55s both;
+}
+.hero-ctas { display:flex; gap:1rem; flex-wrap:wrap; animation: riseUp .8s .7s both; }
+
+/* Hero right — floating card */
+.hero-right {
+  position:relative; z-index:2;
+  display:flex; align-items:center; justify-content:center;
+  animation: riseUp .9s .35s both;
+}
+.profile-card {
+  width: 320px;   /* increase size */
+  height: 420px;
+  transform: scale(1.05); /* slightly bigger on full view */
+}
+.card-avatar-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(45deg, #ff7a18, #ffb347);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile-card {
+  background:#fff;
+  border-radius:28px 8px 28px 8px;
+  padding:2.8rem 2.4rem;
+  width:320px;
+  box-shadow: var(--shadow-warm), 0 2px 0 rgba(212,100,122,.1);
+  position:relative;
+  animation: cardFloat 7s ease-in-out infinite;
+  border: 1px solid rgba(212,100,122,.08);
+}
+@keyframes cardFloat {
+  0%,100%{transform:translateY(0) rotate(-1.5deg);}
+  50%{transform:translateY(-20px) rotate(1.5deg);}
+}
+.card-avatar-ring {
+  width:88px; height:88px; border-radius:50%;
+  background: var(--grad-logo);
+  margin:0 auto 1.2rem;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond', serif;
+  font-size:2.6rem; color:#fff; font-weight:600;
+  position:relative;
+}
+
+.card-avatar-ring::after {
+  content:''; position:absolute; inset:-4px;
+  border-radius:50%; border:2px dashed rgba(212,100,122,.3);
+  animation: spinSlow 12s linear infinite;
+}
+@keyframes spinSlow { to{transform:rotate(360deg);} }
+.c-logo-wrap { text-align:center; margin-bottom:.3rem; }
+.c-logo-wrap img { height:28px; width:auto; }
+.card-sub { text-align:center; color:var(--muted); font-size:.8rem; margin-bottom:1.4rem; }
+.card-chips { display:flex; flex-wrap:wrap; gap:.45rem; justify-content:center; margin-bottom:1.5rem; }
+.c-chip {
+  font-size:.7rem; font-weight:600; padding:.28em .75em;
+  border-radius:20px; background:var(--coral-pale); color:var(--coral);
+}
+
+.passport-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.c-chip.gold { background:var(--gold-pale); color:var(--gold); }
+.card-stats {
+  display:flex; justify-content:space-around;
+  padding-top:1.2rem;
+  border-top:1px solid var(--mist);
+}
+.cs { text-align:center; }
+.cs-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.9rem; font-weight:700; line-height:1;
+  background:var(--grad-logo); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.cs-lbl { font-size:.65rem; color:var(--muted); letter-spacing:.06em; margin-top:.15rem; }
+
+/* Floating badges */
+.fbadge {
+  position:absolute; background:#fff;
+  border-radius:14px; padding:.55rem 1rem;
+  box-shadow: 0 8px 28px rgba(212,100,122,.18);
+  display:flex; align-items:center; gap:.5rem;
+  font-size:.76rem; font-weight:600; color:var(--plum-mid);
+  white-space:nowrap;
+}
+.fbadge-1 { top:-18px; right:-30px; animation: floatOrb 5s ease-in-out infinite; }
+.fbadge-2 { bottom:20px; left:-44px; animation: floatOrb 6s 1.5s ease-in-out infinite; }
+.fbadge-icon { font-size:1.1rem; }
+
+/* Scroll hint */
+.scroll-hint {
+  position:absolute; bottom:2.5rem; left:8%;
+  display:flex; align-items:center; gap:.8rem;
+  color:var(--muted); font-size:.75rem; letter-spacing:.14em; text-transform:uppercase;
+  animation: riseUp 1s 1.3s both;
+}
+.scroll-line {
+  height:1px; background:var(--grad-logo);
+  animation: lineGrow 2s ease-in-out infinite;
+}
+@keyframes lineGrow { 0%,100%{width:30px;} 50%{width:60px;} }
+
+@keyframes riseUp {
+  from{opacity:0; transform:translateY(32px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* ═══ ABOUT ═══ */
+#about {
+  background: #fff;
+  position:relative; overflow:hidden;
+}
+#about::before {
+  content:''; position:absolute;
+  width:600px; height:600px; right:-120px; top:-120px;
+  background: radial-gradient(circle, rgba(212,100,122,.07) 0%, transparent 70%);
+}
+.about-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8rem; align-items:center; position:relative; z-index:1;
+}
+.about-visual { position:relative; }
+.about-frame {
+  width: 70%;
+  height: 50%;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: auto; margin-right:8%;
+  aspect-ratio:4/5;
+  border-radius:32px 8px 32px 8px;
+  background: var(--grad-logo);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond', serif;
+  font-size:5rem; color:rgba(255,255,255,.5); font-weight:600;
+  box-shadow: var(--shadow-warm);
+  position:relative; overflow:hidden;
+}
+
+.about-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.about-frame::before {
+  content:'✦ design ✦ craft ✦ empathy ✦';
+  position:absolute; bottom:1.5rem; left:0; right:0;
+  font-family:'Outfit',sans-serif; font-size:.62rem;
+  letter-spacing:.25em; text-align:center;
+  color:rgba(71, 14, 65, 0.45); text-transform:uppercase;
+}
+.about-frame::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(to bottom right, rgba(255,255,255,.08) 0%, transparent 60%);
+}
+.about-badge {
+  position:absolute; bottom:-30px; right:-0px;
+  background:var(--plum); color:#fff;
+  padding:1.1rem 1.3rem; border-radius:16px;
+  box-shadow: 0 12px 40px rgba(61,31,42,.35);
+  text-align:center;
+}
+.ab-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:2.2rem; font-weight:700; line-height:1;
+  background:var(--grad-logo); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.ab-txt { font-size:.68rem; color:rgba(255,255,255,.55); letter-spacing:.08em; margin-top:.2rem; }
+
+.about-content h2 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(2rem, 3.5vw, 3.2rem); font-weight:600;
+  color:var(--plum); line-height:1.1; margin-bottom:1.2rem;
+}
+.about-content h2 em { font-style:italic; background:var(--grad-logo); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.about-content p { color:var(--muted); line-height:1.88; font-size:.95rem; margin-bottom:1.2rem; }
+.icon {
+  width: 18px;
+  height: 18px;
+}
+.toolkit-label { font-size:.72rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--plum-lt); margin-bottom:.9rem; }
+.toolkit-grid { display:flex; flex-wrap:wrap; gap:.7rem; }
+.t-item {
+  background:var(--warm-white); border:1.5px solid var(--mist);
+  border-radius:10px; padding:.5rem 1rem;
+  font-size:.82rem; font-weight:500; color:var(--plum-mid);
+  display:flex; align-items:center; gap:.45rem;
+  transition:all .25s; box-shadow:0 2px 10px rgba(212,100,122,.05);
+}
+.t-item:hover {
+  border-color:var(--coral-lt); background:var(--coral-pale);
+  color:var(--coral); transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(212,100,122,.15);
+}
+
+/* ═══ PROJECTS ═══ */
+#projects { background:var(--cream); }
+.sec-header { margin-bottom:3.5rem; }
+.sec-header h2 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(2.2rem, 4vw, 3.5rem); font-weight:600;
+  color:var(--plum); line-height:1.1;
+}
+.sec-header h2 span { background:var(--grad-logo); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.sec-sub { color:var(--muted); font-size:.95rem; margin-top:.5rem; max-width:480px; }
+
+.proj-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+  gap:1.8rem;
+}
+.proj-card {
+  background:#fff; border-radius:20px;
+  overflow:hidden; border:1.5px solid rgba(212,100,122,.06);
+  box-shadow:0 4px 24px rgba(212,100,122,.07);
+  transition:transform .35s, box-shadow .35s;
+}
+.proj-card:hover { transform:translateY(-8px); box-shadow:0 24px 60px rgba(212,100,122,.18); }
+.proj-thumb {
+  width:100%; height:210px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:3.5rem; position:relative; overflow:hidden;
+}
+.pt1 { background:linear-gradient(135deg,#9E0D85,#C940AA); }
+.pt2 { background:linear-gradient(135deg,#C940AA,#F39F5F,#F7B87A); }
+.pt3 { background:linear-gradient(135deg,#150708,#3A1020,#9E0D85); }
+.proj-thumb::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.1));
+}
+.proj-body { padding:1.5rem; }
+.proj-tag { font-size:.68rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--coral); margin-bottom:.4rem; }
+.proj-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.4rem; font-weight:600; color:var(--plum); margin-bottom:.55rem; line-height:1.2;
+}
+.proj-desc { font-size:.85rem; color:var(--muted); line-height:1.72; margin-bottom:1.1rem; }
+.proj-foot { display:flex; align-items:center; justify-content:space-between; }
+.proj-chips { display:flex; gap:.38rem; flex-wrap:wrap; }
+.pchip { font-size:.68rem; font-weight:600; padding:.24em .68em; border-radius:10px; background:var(--coral-pale); color:var(--coral); }
+.pchip.g { background:var(--gold-pale); color:var(--gold); }
+.proj-arrow {
+  width:36px; height:36px; border-radius:50%; flex-shrink:0;
+  background:var(--grad-logo); display:flex; align-items:center; justify-content:center;
+  color:#fff; text-decoration:none; font-size:.95rem;
+  transition:transform .2s, box-shadow .2s;
+}
+.proj-arrow:hover { transform:scale(1.15); box-shadow:0 6px 18px rgba(212,100,122,.45); }
+
+/* ═══ CONTACT ═══ */
+#contact { background:var(--plum); position:relative; overflow:hidden; }
+#contact::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 80% 50%, rgba(243,159,95,.15) 0%, transparent 65%);
+}
+#contact::after {
+  content:'✦'; position:absolute; font-size:18rem;
+  color:rgba(255,255,255,.02); right:-2rem; bottom:-4rem;
+  font-family:'Cormorant Garamond', serif;
+  pointer-events:none;
+}
+.contact-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5rem; align-items:start; position:relative; z-index:1;
+}
+.contact-left h2 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(2rem,3.5vw,3.2rem); font-weight:600;
+  color:#fff; line-height:1.1; margin-bottom:1rem;
+}
+.contact-left h2 em { font-style:italic; background:var(--grad-logo); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.contact-left p { color:rgba(255,255,255,.45); line-height:1.85; margin-bottom:2rem; }
+.cinfo { display:flex; flex-direction:column; gap:.9rem; }
+.cinfo-row { display:flex; align-items:center; gap:.9rem; color:rgba(255,255,255,.65); font-size:.9rem; }
+.cinfo-icon {
+  width:40px; height:40px; border-radius:10px; flex-shrink:0;
+  background:rgba(158,13,133,.18); display:flex; align-items:center; justify-content:center; font-size:1rem;
+}
+
+.cform { display:flex; flex-direction:column; gap:1.1rem; }
+.form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.fg { display:flex; flex-direction:column; gap:.4rem; }
+.fg label { font-size:.72rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.4); }
+.fg input, .fg textarea {
+  background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.1);
+  border-radius:10px; padding:.85rem 1.1rem;
+  color:#fff; font-family:'Outfit',sans-serif; font-size:.9rem;
+  outline:none; resize:none;
+  transition:border-color .25s, background .25s;
+}
+.fg input:focus, .fg textarea:focus {
+  border-color:rgba(243,159,95,.55);
+  background:rgba(158,13,133,.1);
+}
+.fg input::placeholder, .fg textarea::placeholder { color:rgba(255,255,255,.22); }
+
+/* ═══ FOOTER ═══ */
+footer {
+  background:#14090F;
+  padding:2.8rem 8% 1.8rem;
+}
+.foot-top {
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:1.5rem;
+  padding-bottom:1.6rem; border-bottom:1px solid rgba(255,255,255,.06);
+}
+.foot-logo img { height:38px; width:auto; display:block; }
+.foot-tagline { color:rgba(255,255,255,.28); font-size:.78rem; margin-top:.3rem; }
+.foot-nav { display:flex; gap:2rem; list-style:none; }
+.foot-nav a { text-decoration:none; color:rgba(255,255,255,.35); font-size:.84rem; transition:color .2s; }
+.foot-nav a:hover { color:var(--coral-lt); }
+.foot-socials { display:flex; gap:.7rem; }
+.fsoc {
+  width:38px; height:38px; border-radius:9px;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.07);
+  display:flex; align-items:center; justify-content:center;
+  color:rgba(255,255,255,.4); text-decoration:none; font-size:.88rem;
+  transition:all .25s; font-weight:600;
+}
+.fsoc:hover {
+  background:var(--coral); color:#fff; border-color:transparent;
+  transform:translateY(-3px); box-shadow:0 6px 18px rgba(158,13,133,.5);
+}
+.foot-bottom {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:1.3rem; flex-wrap:wrap; gap:.6rem;
+}
+.foot-copy, .foot-made { color:rgba(255,255,255,.2); font-size:.78rem; }
+.foot-made span { color:var(--coral-lt); }
+
+/* ── Reveal ── */
+.reveal { opacity:0; transform:translateY(36px); transition:opacity .7s, transform .7s; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ── Toast ── */
+.toast {
+  position:fixed; bottom:2rem; right:2rem;
+  background:var(--plum); color:#fff;
+  padding:.85rem 1.5rem; border-radius:12px;
+  font-size:.88rem; z-index:999;
+  box-shadow:0 10px 40px rgba(61,31,42,.4);
+  display:flex; align-items:center; gap:.6rem;
+  transform:translateY(80px); opacity:0;
+  transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  border-left:3px solid var(--coral-lt);
+}
+.toast.show { transform:translateY(0); opacity:1; }
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  #home { grid-template-columns:1fr; }
+  .hero-right { display:none; }
+  .about-grid { grid-template-columns:1fr; }
+  .contact-grid { grid-template-columns:1fr; }
+  .form-row-2 { grid-template-columns:1fr; }
+  .foot-top { flex-direction:column; }
+  .nav-links { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Wavy cursor canvas -->
+<canvas id="cursor-canvas"></canvas>
+<div class="cursor-dot" id="cdot"></div>
+
+<!-- ── Nav ── -->
+<nav id="navbar">
+  <div class="nav-logo"> <!--</div> style="background:#ffffff;border-radius:8px;padding:4px 10px;">-->
+     <img src="images/Group 945.png" alt="My Image">
+  </div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About Me</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#Gallery">Gallery</a></li>
+    <li><a href="#contact">Get in Touch</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="home">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-bg-orb orb3"></div>
+
+  <div class="hero-text">
+    <p class="hero-hi">Hello, I'm</p>
+    <div class="hero-logo-name" > <!--</div>style="display:inline-block;background:#150708;border-radius:12px;padding:8px 18px;">-->
+      <img src="images/Group 945.png" alt="My Image">
+    </div>
+    <p class="hero-role">UX · UI · Interaction Designer</p>
+    <p class="hero-desc">
+      Crafting digital experiences where empathy meets elegance.
+      I transform complex problems into intuitive, beautiful interfaces
+      that users genuinely love — with 2+ years of hands-on design craft.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-primary">View My Work →</a>
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="btn btn-ghost">Behance ↗</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div style="position:relative;">
+      <div class="profile-card">
+        <div class="card-avatar-ring">
+          <img class="passport-photo" src="images/Masscort1.png" alt="Sonali">
+          <span class="avatar-initials" style="display:none;">S</span>
+        </div>
+        <div class="c-logo-wrap"> <!--</div> style="background:#150708;border-radius:8px;padding:4px 10px;display:inline-block;margin:0 auto;">-->
+          <img src="images/Group 945.png" alt="My Image">
+        </div>
+        <p class="card-sub">UX / UI Designer · Graphic Designer </p>
+        <div class="card-chips">
+          <span class="c-chip">Figma</span>
+          <span class="c-chip gold">Illustrator</span>
+          <span class="c-chip">Photoshop</span>
+          <span class="c-chip gold">UX Research</span>
+          <span class="c-chip">Prototyping</span>
+        </div>
+        <div class="card-stats">
+          <div class="cs"><div class="cs-num">2+</div><div class="cs-lbl">Yrs Exp</div></div>
+          <div class="cs"><div class="cs-num">3+</div><div class="cs-lbl">Projects</div></div>
+          <div class="cs"><div class="cs-num">3+</div><div class="cs-lbl">Tools</div></div>
+        </div>
+      </div>
+      <div class="fbadge fbadge-1"><span class="fbadge-icon">🎨</span>Crafting Ideas</div>
+      <div class="fbadge fbadge-2"><span class="fbadge-icon">⚡</span>Curious to work</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-frame">
+        <img src="images/mypro.jpeg" alt="About Me"></div>
+      <div class="about-badge">
+        <div class="ab-num">2+</div>
+        <div class="ab-txt">Years of<br>Experience</div>
+      </div>
+    </div>
+    <div class="about-content reveal">
+      <span class="tag-pill">About Me</span>
+      <h2>Designing with <em>purpose</em>,<br>crafting with heart.</h2>
+      <p>
+        I'm a BDes Interaction Design student at Lovely Professional University,
+        blending user research with visual finesse. My design philosophy is rooted
+        in empathy — every pixel has intention.
+      </p>
+      <p>
+        With 2+ years of hands-on Figma experience alongside Adobe Illustrator
+        and Photoshop, I bridge the gap between raw user insight and
+        pixel-perfect interfaces — from accessibility redesigns to health apps.
+      </p>
+      <div style="margin-top:1.6rem;">
+        <p class="toolkit-label">My Toolkit</p>
+        <div class="toolkit-grid">
+          <div class="t-item"><img src="images/fig.png" class="icon">Figma</div>
+          <div class="t-item"><img src="images/adobeill.png" class="icon">Adobe Illustrator</div>
+          <div class="t-item"><img src="images/photoshop.png" class="icon">Photoshop</div>
+          <div class="t-item"><i class="fa-brands fa-html5 html"></i>HTML & CSS</div>
+          <div class="t-item">🔍 UX Research</div>
+          <div class="t-item">💡 Prototyping</div>
+          <div class="t-item">🧠 Design Thinking</div>
+          <div class="t-item"><img src="images/canva.png" class="icon"> Canva</div>
+          <div class="t-item">📐 Wireframing</div>
+        </div>
+      </div>
+      <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="#contact" class="btn btn-primary">Let's Work Together →</a>
+        <a href="https://linkedin.com/in/sonali-hassa" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROJECTS (tabbed: UX/UI + Graphics) ═══ -->
+<section id="projects">
+  <div class="sec-header reveal">
+    <span class="tag-pill">Portfolio</span>
+    <h2>My <span>Work</span></h2>
+    <p class="sec-sub">From in-depth UX case studies to graphic design — click a tab to explore.</p>
+  </div>
+
+  <div class="proj-tabs reveal">
+    <button class="proj-tab active" onclick="switchTab('uxui',this)">🎨 UX/UI Case Studies</button>
+    <button class="proj-tab" onclick="switchTab('graphics',this)">✦ Graphics Design</button>
+  </div>
+
+  <!-- ── UX/UI Pane ── -->
+  <div class="proj-pane" id="tab-uxui">
+    <div class="proj-grid">
+      <div class="proj-card reveal" style="cursor:pointer;" onclick="openCase('pregnancy')">
+        <div class="proj-thumb" style="background:linear-gradient(135deg,#C940AA,#F39F5F);">🤱</div>
+        <div class="proj-body">
+          <p class="proj-tag">Health · Mobile UX · Awareness</p>
+          <h3 class="proj-title">Pregnancy Awareness Application</h3>
+          <p class="proj-desc">A compassionate mobile app to guide expecting mothers through every stage — nutrition, milestones, and health monitoring with a warm visual language.</p>
+          <div class="proj-foot">
+            <div class="proj-chips"><span class="pchip">Figma</span><span class="pchip g">Illustrator</span><span class="pchip">Mobile UX</span></div>
+            <span class="proj-arrow">↗</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card reveal" style="cursor:pointer;" onclick="openCase('jobseva')">
+        <div class="proj-thumb" style="background:linear-gradient(135deg,#150708,#9E0D85,#F39F5F);">💼</div>
+        <div class="proj-body">
+          <p class="proj-tag">Employment · Mobile App · Social Impact</p>
+          <h3 class="proj-title">JobSeva App</h3>
+          <p class="proj-desc">A job-matching platform for blue-collar workers in India — language-inclusive, accessible, built for low-tech users.</p>
+          <div class="proj-foot">
+            <div class="proj-chips"><span class="pchip">Figma</span><span class="pchip g">UX Research</span><span class="pchip">Accessibility</span></div>
+            <span class="proj-arrow">↗</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card reveal" style="cursor:pointer;" onclick="openCase('easyloan')">
+        <div class="proj-thumb" style="background:linear-gradient(135deg,#0D2E9E,#0D7B9E,#F39F5F);">💰</div>
+        <div class="proj-body">
+          <p class="proj-tag">FinTech · Mobile App · Trust Design</p>
+          <h3 class="proj-title">Easy Loan App</h3>
+          <p class="proj-desc">A transparent loan app that demystifies borrowing for first-time users — clarity, reduced anxiety, step-by-step guided flows.</p>
+          <div class="proj-foot">
+            <div class="proj-chips"><span class="pchip">Figma</span><span class="pchip g">Prototyping</span><span class="pchip">FinTech UX</span></div>
+            <span class="proj-arrow">↗</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Graphics Pane ── -->
+  <div class="proj-pane" id="tab-graphics" style="display:none;">
+    <div class="graphics-grid">
+      <div class="graphic-card reveal" onclick="openGraphic('jordan')" style="cursor:pointer;">
+        <div class="graphic-thumb gt1">
+          <span class="g-emoji">👟</span>
+          <div class="g-hover-hint">Click to view project →</div>
+        </div>
+        <div class="graphic-info">
+          <div>
+            <div class="graphic-title">"Just Do It" — Air Jordan 1 Mid</div>
+            <div class="graphic-sub">Product Poster · Illustrator · Photoshop</div>
+          </div>
+          <span class="g-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="graphic-card reveal" onclick="openGraphic('brand')" style="cursor:pointer;">
+        <div class="graphic-thumb gt2">
+          <span class="g-emoji">🎨</span>
+          <div class="g-hover-hint">Click to view project →</div>
+        </div>
+        <div class="graphic-info">
+          <div>
+            <div class="graphic-title">Brand Identity Poster</div>
+            <div class="graphic-sub">Typography · Gradient Design · Illustrator</div>
+          </div>
+          <span class="g-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="graphic-card reveal" onclick="openGraphic('campaign')" style="cursor:pointer;">
+        <div class="graphic-thumb gt3">
+          <span class="g-emoji">🌸</span>
+          <div class="g-hover-hint">Click to view project →</div>
+        </div>
+        <div class="graphic-info">
+          <div>
+            <div class="graphic-title">Illustrated Campaign</div>
+            <div class="graphic-sub">Social Media · Vector Illustration · Figma</div>
+          </div>
+          <span class="g-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="graphic-card reveal" onclick="openGraphic('poster')" style="cursor:pointer;">
+        <div class="graphic-thumb gt4">
+          <span class="g-emoji">✨</span>
+          <div class="g-hover-hint">Click to view project →</div>
+        </div>
+        <div class="graphic-info">
+          <div>
+            <div class="graphic-title">Event Poster Design</div>
+            <div class="graphic-sub">Print &amp; Digital · Photoshop · Layout</div>
+          </div>
+          <span class="g-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="graphic-card reveal" onclick="openGraphic('illustration')" style="cursor:pointer;">
+        <div class="graphic-thumb gt5">
+          <span class="g-emoji">🖌️</span>
+          <div class="g-hover-hint">Click to view project →</div>
+        </div>
+        <div class="graphic-info">
+          <div>
+            <div class="graphic-title">Digital Illustration</div>
+            <div class="graphic-sub">Character Design · Adobe Illustrator</div>
+          </div>
+          <span class="g-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="graphic-card reveal" onclick="openGraphic('concept')" style="cursor:pointer;">
+        <div class="graphic-thumb gt6">
+          <span class="g-emoji">🔥</span>
+          <div class="g-hover-hint">Click to view project →</div>
+        </div>
+        <div class="graphic-info">
+          <div>
+            <div class="graphic-title">Concept Visual Design</div>
+            <div class="graphic-sub">Experimental · Mood Design · Photoshop</div>
+          </div>
+          <span class="g-arrow">↗</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GRAPHIC PROJECT MODALS ═══ -->
+
+<!-- Modal: Air Jordan -->
+<div class="gp-modal" id="gp-jordan">
+  <div class="gp-inner">
+    <button class="gp-close" onclick="closeGraphic('jordan')">✕</button>
+    <div class="gp-hero-badge" style="background:linear-gradient(135deg,#150708,#9E0D85);">👟</div>
+    <div class="gp-meta-row">
+      <span class="gp-pill">Product Poster</span>
+      <span class="gp-pill">Adobe Illustrator</span>
+      <span class="gp-pill">Photoshop</span>
+    </div>
+    <h2 class="gp-title">"Just Do It" — Air Jordan 1 Mid</h2>
+    <p class="gp-desc">A bold product poster designed around the iconic Air Jordan 1 Mid silhouette — combining dynamic composition, gradient lighting, and Nike's "Just Do It" energy into a high-impact visual. Created using Adobe Illustrator for vector elements and Photoshop for final compositing.</p>
+
+    <div class="gp-visuals-label">Project Visuals</div>
+    <div class="gp-visuals-grid">
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#150708,#9E0D85,#F39F5F);">
+        <!-- 📸 Replace with: <img src="jordan-poster-1.jpg" alt="Air Jordan poster"> -->
+        <div class="gp-slot-inner"><span class="gp-slot-icon">👟</span><span class="gp-slot-hint">Add poster image here<br><code>src="jordan-1.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#3A1020,#C940AA);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🎨</span><span class="gp-slot-hint">Add detail/process shot<br><code>src="jordan-2.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot gp-wide" style="background:linear-gradient(145deg,#9E0D85,#F39F5F,#F7B87A);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">✨</span><span class="gp-slot-hint">Add full-spread mockup<br><code>src="jordan-3.jpg"</code></span></div>
+      </div>
+    </div>
+
+    <div class="gp-details-grid">
+      <div class="gp-detail-card"><strong>🛠️ Tools</strong>Adobe Illustrator, Photoshop</div>
+      <div class="gp-detail-card"><strong>📐 Type</strong>Product Poster / Brand Graphic</div>
+      <div class="gp-detail-card"><strong>🎯 Goal</strong>High-impact visual storytelling around a product</div>
+    </div>
+
+    <div class="gp-actions">
+      <a href="https://www.behance.net/gallery/195825969/JUST-DO-IT-Air-Jordan-1-Mid" target="_blank" class="gp-behance-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.515 1.870 1.771 1.870.72 0 1.233-.365 1.43-.841h2.555zm-5.443-3.668c-.073-1.14-.514-1.869-1.58-1.869-.845 0-1.47.527-1.631 1.869h3.21zM7.27 6.5c1.634 0 2.865.622 2.865 2.197 0 .93-.549 1.566-1.433 1.883.966.257 1.576.969 1.576 2.06 0 1.753-1.353 2.86-3.272 2.86H2V6.5h5.27zm-.803 3.51c.818 0 1.223-.337 1.223-.91 0-.574-.405-.837-1.223-.837H4.455v1.747h2.012zm.177 3.583c.909 0 1.38-.367 1.38-1.029 0-.657-.471-1.014-1.38-1.014H4.455v2.043h2.189z"/></svg>
+        Explore on Behance
+      </a>
+      <button class="gp-close-btn" onclick="closeGraphic('jordan')">Close Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Brand Identity -->
+<div class="gp-modal" id="gp-brand">
+  <div class="gp-inner">
+    <button class="gp-close" onclick="closeGraphic('brand')">✕</button>
+    <div class="gp-hero-badge" style="background:linear-gradient(135deg,#0D2E9E,#C940AA);">🎨</div>
+    <div class="gp-meta-row">
+      <span class="gp-pill">Brand Identity</span>
+      <span class="gp-pill">Typography</span>
+      <span class="gp-pill">Illustrator</span>
+    </div>
+    <h2 class="gp-title">Brand Identity Poster</h2>
+    <p class="gp-desc">A typographic brand identity poster exploring the relationship between form, hierarchy, and colour. The design uses a bold gradient palette and intentional negative space to create a memorable brand impression that works across print and digital media.</p>
+
+    <div class="gp-visuals-label">Project Visuals</div>
+    <div class="gp-visuals-grid">
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#0D2E9E,#6B2AA0);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🎨</span><span class="gp-slot-hint">Add main poster<br><code>src="brand-1.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#6B2AA0,#C940AA);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🖋️</span><span class="gp-slot-hint">Add typography detail<br><code>src="brand-2.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot gp-wide" style="background:linear-gradient(145deg,#C940AA,#F39F5F);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">✦</span><span class="gp-slot-hint">Add colour palette / mockup<br><code>src="brand-3.jpg"</code></span></div>
+      </div>
+    </div>
+
+    <div class="gp-details-grid">
+      <div class="gp-detail-card"><strong>🛠️ Tools</strong>Adobe Illustrator</div>
+      <div class="gp-detail-card"><strong>📐 Type</strong>Brand Identity / Poster</div>
+      <div class="gp-detail-card"><strong>🎯 Goal</strong>Typography-led visual brand expression</div>
+    </div>
+
+    <div class="gp-actions">
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="gp-behance-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.515 1.870 1.771 1.870.72 0 1.233-.365 1.43-.841h2.555zm-5.443-3.668c-.073-1.14-.514-1.869-1.58-1.869-.845 0-1.47.527-1.631 1.869h3.21zM7.27 6.5c1.634 0 2.865.622 2.865 2.197 0 .93-.549 1.566-1.433 1.883.966.257 1.576.969 1.576 2.06 0 1.753-1.353 2.86-3.272 2.86H2V6.5h5.27zm-.803 3.51c.818 0 1.223-.337 1.223-.91 0-.574-.405-.837-1.223-.837H4.455v1.747h2.012zm.177 3.583c.909 0 1.38-.367 1.38-1.029 0-.657-.471-1.014-1.38-1.014H4.455v2.043h2.189z"/></svg>
+        Explore on Behance
+      </a>
+      <button class="gp-close-btn" onclick="closeGraphic('brand')">Close Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Illustrated Campaign -->
+<div class="gp-modal" id="gp-campaign">
+  <div class="gp-inner">
+    <button class="gp-close" onclick="closeGraphic('campaign')">✕</button>
+    <div class="gp-hero-badge" style="background:linear-gradient(135deg,#F39F5F,#9E0D85);">🌸</div>
+    <div class="gp-meta-row">
+      <span class="gp-pill">Illustration</span>
+      <span class="gp-pill">Social Media</span>
+      <span class="gp-pill">Figma</span>
+    </div>
+    <h2 class="gp-title">Illustrated Campaign</h2>
+    <p class="gp-desc">A series of vector illustrations created for a social media campaign — using soft colours, expressive characters, and cohesive visual language to communicate brand values in a warm, relatable way. Designed and animated in Figma with vector work from Illustrator.</p>
+
+    <div class="gp-visuals-label">Project Visuals</div>
+    <div class="gp-visuals-grid">
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#F39F5F,#C940AA);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🌸</span><span class="gp-slot-hint">Add main illustration<br><code>src="campaign-1.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#C940AA,#9E0D85);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🎭</span><span class="gp-slot-hint">Add character detail<br><code>src="campaign-2.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot gp-wide" style="background:linear-gradient(145deg,#9E0D85,#F7B87A);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">📱</span><span class="gp-slot-hint">Add social post mockups<br><code>src="campaign-3.jpg"</code></span></div>
+      </div>
+    </div>
+
+    <div class="gp-details-grid">
+      <div class="gp-detail-card"><strong>🛠️ Tools</strong>Figma, Adobe Illustrator</div>
+      <div class="gp-detail-card"><strong>📐 Type</strong>Social Media Campaign</div>
+      <div class="gp-detail-card"><strong>🎯 Goal</strong>Brand storytelling through character illustration</div>
+    </div>
+
+    <div class="gp-actions">
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="gp-behance-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.515 1.870 1.771 1.870.72 0 1.233-.365 1.43-.841h2.555zm-5.443-3.668c-.073-1.14-.514-1.869-1.58-1.869-.845 0-1.47.527-1.631 1.869h3.21zM7.27 6.5c1.634 0 2.865.622 2.865 2.197 0 .93-.549 1.566-1.433 1.883.966.257 1.576.969 1.576 2.06 0 1.753-1.353 2.86-3.272 2.86H2V6.5h5.27zm-.803 3.51c.818 0 1.223-.337 1.223-.91 0-.574-.405-.837-1.223-.837H4.455v1.747h2.012zm.177 3.583c.909 0 1.38-.367 1.38-1.029 0-.657-.471-1.014-1.38-1.014H4.455v2.043h2.189z"/></svg>
+        Explore on Behance
+      </a>
+      <button class="gp-close-btn" onclick="closeGraphic('campaign')">Close Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Event Poster -->
+<div class="gp-modal" id="gp-poster">
+  <div class="gp-inner">
+    <button class="gp-close" onclick="closeGraphic('poster')">✕</button>
+    <div class="gp-hero-badge" style="background:linear-gradient(135deg,#C940AA,#0D7B9E);">✨</div>
+    <div class="gp-meta-row">
+      <span class="gp-pill">Event Poster</span>
+      <span class="gp-pill">Print & Digital</span>
+      <span class="gp-pill">Photoshop</span>
+    </div>
+    <h2 class="gp-title">Event Poster Design</h2>
+    <p class="gp-desc">A print-ready event poster designed for both physical and digital distribution — balancing typographic hierarchy, visual energy, and information clarity. The composition uses layered depth, bold colour contrast, and photo manipulation to create a striking, attention-grabbing layout.</p>
+
+    <div class="gp-visuals-label">Project Visuals</div>
+    <div class="gp-visuals-grid">
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#C940AA,#0D7B9E);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">✨</span><span class="gp-slot-hint">Add poster front<br><code>src="poster-1.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#0D7B9E,#0D2E9E);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">📋</span><span class="gp-slot-hint">Add alternate version<br><code>src="poster-2.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot gp-wide" style="background:linear-gradient(145deg,#0D2E9E,#C940AA,#F7B87A);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🖼️</span><span class="gp-slot-hint">Add real-world mockup<br><code>src="poster-3.jpg"</code></span></div>
+      </div>
+    </div>
+
+    <div class="gp-details-grid">
+      <div class="gp-detail-card"><strong>🛠️ Tools</strong>Adobe Photoshop, Illustrator</div>
+      <div class="gp-detail-card"><strong>📐 Type</strong>Event Poster / Print Design</div>
+      <div class="gp-detail-card"><strong>🎯 Goal</strong>High-visibility event communication</div>
+    </div>
+
+    <div class="gp-actions">
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="gp-behance-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.515 1.870 1.771 1.870.72 0 1.233-.365 1.43-.841h2.555zm-5.443-3.668c-.073-1.14-.514-1.869-1.58-1.869-.845 0-1.47.527-1.631 1.869h3.21zM7.27 6.5c1.634 0 2.865.622 2.865 2.197 0 .93-.549 1.566-1.433 1.883.966.257 1.576.969 1.576 2.06 0 1.753-1.353 2.86-3.272 2.86H2V6.5h5.27zm-.803 3.51c.818 0 1.223-.337 1.223-.91 0-.574-.405-.837-1.223-.837H4.455v1.747h2.012zm.177 3.583c.909 0 1.38-.367 1.38-1.029 0-.657-.471-1.014-1.38-1.014H4.455v2.043h2.189z"/></svg>
+        Explore on Behance
+      </a>
+      <button class="gp-close-btn" onclick="closeGraphic('poster')">Close Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Digital Illustration -->
+<div class="gp-modal" id="gp-illustration">
+  <div class="gp-inner">
+    <button class="gp-close" onclick="closeGraphic('illustration')">✕</button>
+    <div class="gp-hero-badge" style="background:linear-gradient(135deg,#3A1020,#C940AA,#F7B87A);">🖌️</div>
+    <div class="gp-meta-row">
+      <span class="gp-pill">Digital Art</span>
+      <span class="gp-pill">Character Design</span>
+      <span class="gp-pill">Illustrator</span>
+    </div>
+    <h2 class="gp-title">Digital Illustration</h2>
+    <p class="gp-desc">A digital illustration series exploring character design and expressive line work. Each piece is built entirely in Adobe Illustrator using vector paths — achieving a clean, scalable illustration style with rich detail, balanced colour palettes, and a distinct visual personality.</p>
+
+    <div class="gp-visuals-label">Project Visuals</div>
+    <div class="gp-visuals-grid">
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#3A1020,#C940AA);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🖌️</span><span class="gp-slot-hint">Add main illustration<br><code>src="illus-1.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#C940AA,#F7B87A);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🎭</span><span class="gp-slot-hint">Add character detail<br><code>src="illus-2.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot gp-wide" style="background:linear-gradient(145deg,#F7B87A,#9E0D85,#3A1020);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🌟</span><span class="gp-slot-hint">Add series / collection view<br><code>src="illus-3.jpg"</code></span></div>
+      </div>
+    </div>
+
+    <div class="gp-details-grid">
+      <div class="gp-detail-card"><strong>🛠️ Tools</strong>Adobe Illustrator</div>
+      <div class="gp-detail-card"><strong>📐 Type</strong>Digital Illustration / Character Art</div>
+      <div class="gp-detail-card"><strong>🎯 Goal</strong>Expressive vector-based character illustration</div>
+    </div>
+
+    <div class="gp-actions">
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="gp-behance-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.515 1.870 1.771 1.870.72 0 1.233-.365 1.43-.841h2.555zm-5.443-3.668c-.073-1.14-.514-1.869-1.58-1.869-.845 0-1.47.527-1.631 1.869h3.21zM7.27 6.5c1.634 0 2.865.622 2.865 2.197 0 .93-.549 1.566-1.433 1.883.966.257 1.576.969 1.576 2.06 0 1.753-1.353 2.86-3.272 2.86H2V6.5h5.27zm-.803 3.51c.818 0 1.223-.337 1.223-.91 0-.574-.405-.837-1.223-.837H4.455v1.747h2.012zm.177 3.583c.909 0 1.38-.367 1.38-1.029 0-.657-.471-1.014-1.38-1.014H4.455v2.043h2.189z"/></svg>
+        Explore on Behance
+      </a>
+      <button class="gp-close-btn" onclick="closeGraphic('illustration')">Close Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Concept Visual -->
+<div class="gp-modal" id="gp-concept">
+  <div class="gp-inner">
+    <button class="gp-close" onclick="closeGraphic('concept')">✕</button>
+    <div class="gp-hero-badge" style="background:linear-gradient(135deg,#150708,#F39F5F);">🔥</div>
+    <div class="gp-meta-row">
+      <span class="gp-pill">Experimental</span>
+      <span class="gp-pill">Mood Design</span>
+      <span class="gp-pill">Photoshop</span>
+    </div>
+    <h2 class="gp-title">Concept Visual Design</h2>
+    <p class="gp-desc">An experimental mood-driven visual series that pushes the boundaries of colour, texture, and atmosphere. Using Photoshop's compositing and blending tools, these pieces explore visual metaphor, abstract emotion, and the interplay between light and shadow — creating evocative, immersive digital art.</p>
+
+    <div class="gp-visuals-label">Project Visuals</div>
+    <div class="gp-visuals-grid">
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#150708,#9E0D85);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🔥</span><span class="gp-slot-hint">Add concept piece 1<br><code>src="concept-1.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot" style="background:linear-gradient(145deg,#9E0D85,#F39F5F);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">💫</span><span class="gp-slot-hint">Add concept piece 2<br><code>src="concept-2.jpg"</code></span></div>
+      </div>
+      <div class="gp-img-slot gp-wide" style="background:linear-gradient(145deg,#F39F5F,#C940AA,#150708);">
+        <div class="gp-slot-inner"><span class="gp-slot-icon">🌌</span><span class="gp-slot-hint">Add final composite / series<br><code>src="concept-3.jpg"</code></span></div>
+      </div>
+    </div>
+
+    <div class="gp-details-grid">
+      <div class="gp-detail-card"><strong>🛠️ Tools</strong>Adobe Photoshop</div>
+      <div class="gp-detail-card"><strong>📐 Type</strong>Experimental / Concept Art</div>
+      <div class="gp-detail-card"><strong>🎯 Goal</strong>Abstract visual storytelling through texture and colour</div>
+    </div>
+
+    <div class="gp-actions">
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="gp-behance-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.515 1.870 1.771 1.870.72 0 1.233-.365 1.43-.841h2.555zm-5.443-3.668c-.073-1.14-.514-1.869-1.58-1.869-.845 0-1.47.527-1.631 1.869h3.21zM7.27 6.5c1.634 0 2.865.622 2.865 2.197 0 .93-.549 1.566-1.433 1.883.966.257 1.576.969 1.576 2.06 0 1.753-1.353 2.86-3.272 2.86H2V6.5h5.27zm-.803 3.51c.818 0 1.223-.337 1.223-.91 0-.574-.405-.837-1.223-.837H4.455v1.747h2.012zm.177 3.583c.909 0 1.38-.367 1.38-1.029 0-.657-.471-1.014-1.38-1.014H4.455v2.043h2.189z"/></svg>
+        Explore on Behance
+      </a>
+      <button class="gp-close-btn" onclick="closeGraphic('concept')">Close Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CASE STUDY MODALS ═══ -->
+<style>
+/* ── Case Study Modal ── */
+.cs-modal {
+  display:none; position:fixed; inset:0; z-index:2000;
+  background:rgba(21,7,8,.92); backdrop-filter:blur(12px);
+  overflow-y:auto; padding: 2rem 0;
+  animation: fadeInModal .35s ease;
+}
+.cs-modal.active { display:block; }
+@keyframes fadeInModal { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+.cs-inner {
+  max-width: 860px; margin: 0 auto; padding: 2rem 5%;
+}
+.cs-close {
+  position:sticky; top:1rem; float:right;
+  width:42px; height:42px; border-radius:50%;
+  background:rgba(158,13,133,.3); border:1.5px solid rgba(158,13,133,.5);
+  color:#fff; font-size:1.4rem; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; z-index:10; transition:all .2s;
+}
+.cs-close:hover { background:var(--coral); }
+.cs-hero-img {
+  width:100%; border-radius:20px; margin:1.5rem 0;
+  background: var(--grad-warm);
+  min-height:240px; display:flex; align-items:center; justify-content:center;
+  font-size:5rem; position:relative; overflow:hidden;
+}
+.cs-pill {
+  display:inline-block; padding:.28em .85em;
+  border-radius:20px; font-size:.7rem; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase;
+  background:rgba(158,13,133,.2); color:var(--coral-lt);
+  margin:.3rem .25rem 0 0;
+}
+.cs-section { margin: 2.2rem 0; }
+.cs-section h3 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.55rem; font-weight:600; color:#fff;
+  margin-bottom:.8rem;
+  padding-bottom:.5rem; border-bottom:1px solid rgba(158,13,133,.2);
+}
+.cs-section p { color:rgba(255,255,255,.65); line-height:1.85; font-size:.93rem; }
+.cs-cards {
+  display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  gap:1rem; margin-top:1rem;
+}
+.cs-card {
+  background:rgba(255,255,255,.05); border:1px solid rgba(158,13,133,.2);
+  border-radius:14px; padding:1.2rem; color:rgba(255,255,255,.75);
+  font-size:.85rem;
+}
+.cs-card strong { display:block; color:#fff; font-weight:600; margin-bottom:.35rem; }
+.cs-timeline {
+  display:flex; flex-direction:column; gap:1rem;
+  border-left:2px solid rgba(158,13,133,.3);
+  padding-left:1.5rem; margin-top:1rem;
+}
+.cs-step {
+  position:relative; color:rgba(255,255,255,.7); font-size:.88rem; line-height:1.7;
+}
+.cs-step::before {
+  content:''; position:absolute; left:-1.88rem; top:.35rem;
+  width:10px; height:10px; border-radius:50%;
+  background:var(--coral);
+}
+.cs-step strong { color:#fff; display:block; font-size:.95rem; }
+.cs-img-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:.8rem; margin-top:1rem;
+}
+.cs-img-placeholder {
+  aspect-ratio:9/16; border-radius:14px;
+  background:linear-gradient(145deg,rgba(158,13,133,.18),rgba(243,159,95,.12));
+  border:1px solid rgba(158,13,133,.2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:2rem; color:rgba(255,255,255,.2);
+}
+.cs-behance-btn {
+  display:inline-flex; align-items:center; gap:.6rem;
+  background:var(--grad-logo); color:#fff; border-radius:50px;
+  padding:.85rem 2rem; font-size:.88rem; font-weight:600;
+  text-decoration:none; letter-spacing:.05em; margin-top:1.5rem;
+  transition:transform .2s, box-shadow .2s;
+}
+.cs-behance-btn:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(212,100,122,.45); }
+.cs-meta {
+  display:flex; flex-wrap:wrap; gap:.6rem;
+  background:rgba(255,255,255,.04); border-radius:14px;
+  padding:1.2rem; margin-bottom:1.5rem;
+}
+.cs-meta-item { display:flex; flex-direction:column; gap:.2rem; min-width:110px; }
+.cs-meta-label { font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.35); }
+.cs-meta-val { font-size:.85rem; color:rgba(255,255,255,.75); }
+
+/* ── Project Tabs ── */
+.proj-tabs {
+  display:flex; gap:.8rem; flex-wrap:wrap;
+  margin-bottom:2.5rem;
+}
+.proj-tab {
+  padding:.7rem 1.8rem; border-radius:50px;
+  font-family:'Outfit',sans-serif; font-size:.86rem; font-weight:600;
+  letter-spacing:.04em; cursor:pointer;
+  border:1.5px solid rgba(158,13,133,.25);
+  background:var(--warm-white); color:var(--plum-mid);
+  transition:all .25s;
+}
+.proj-tab:hover { border-color:var(--coral); color:var(--coral); background:var(--coral-pale); }
+.proj-tab.active {
+  background:var(--grad-logo); color:#fff; border-color:transparent;
+  box-shadow:0 6px 24px rgba(158,13,133,.35);
+}
+.proj-pane { animation: fadePane .35s ease; }
+@keyframes fadePane { from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+
+/* ── Gallery Section ── */
+#gallery { background: var(--cream); }
+.gallery-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 220px;
+  gap:1.2rem;
+}
+.gal-card {
+  border-radius:18px; overflow:hidden; cursor:pointer;
+  border:1.5px solid rgba(158,13,133,.08);
+  box-shadow:0 4px 20px rgba(158,13,133,.06);
+  transition:transform .35s, box-shadow .35s;
+  display:flex; flex-direction:column;
+}
+.gal-card:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 18px 50px rgba(158,13,133,.18); }
+.gal-card:hover .gal-overlay { opacity:1; }
+.gal-tall { grid-row: span 2; }
+.gal-wide { grid-column: span 2; }
+.gal-thumb {
+  flex:1; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.gal-thumb img {
+  width:100%; height:100%; object-fit:cover; object-position:center;
+  display:block;
+}
+.gal-placeholder-icon { font-size:3rem; opacity:.45; }
+.gal-overlay {
+  position:absolute; inset:0;
+  background:rgba(21,7,8,.6);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .3s;
+}
+.gal-add-hint {
+  font-size:.78rem; color:rgba(255,255,255,.7);
+  letter-spacing:.1em; text-transform:uppercase;
+}
+.gal-info {
+  padding:.7rem 1rem; background:#fff;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.5rem; flex-shrink:0;
+}
+.gal-loc { font-size:.72rem; color:var(--coral); font-weight:600; letter-spacing:.06em; white-space:nowrap; }
+.gal-caption { font-size:.78rem; color:var(--muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.gallery-note {
+  margin-top:2rem; text-align:center;
+  font-size:.8rem; color:var(--muted);
+}
+.gallery-note code {
+  background:var(--coral-pale); color:var(--coral);
+  padding:.1em .4em; border-radius:4px; font-size:.78rem;
+}
+@media(max-width:900px){
+  .gallery-grid { grid-template-columns:repeat(2,1fr); }
+  .gal-wide { grid-column:span 1; }
+}
+@media(max-width:580px){
+  .gallery-grid { grid-template-columns:1fr; }
+  .gal-tall,.gal-wide { grid-row:span 1; grid-column:span 1; }
+}
+
+/* ── Gallery Lightbox ── */
+.gal-modal {
+  display:none; position:fixed; inset:0; z-index:3000;
+  background:rgba(21,7,8,.95); backdrop-filter:blur(14px);
+  align-items:center; justify-content:center;
+}
+.gal-modal.open { display:flex; }
+.gal-modal-inner {
+  max-width:780px; width:90%; position:relative;
+  animation: fadeInModal .3s ease;
+}
+.gal-close {
+  position:absolute; top:-48px; right:0;
+  width:38px; height:38px; border-radius:50%;
+  background:rgba(158,13,133,.3); border:1.5px solid rgba(158,13,133,.5);
+  color:#fff; font-size:1.2rem; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s;
+}
+.gal-close:hover { background:var(--coral); }
+.gal-modal-img {
+  width:100%; aspect-ratio:4/3; border-radius:16px;
+  overflow:hidden; background:var(--grad-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-size:5rem;
+}
+.gal-modal-img img { width:100%; height:100%; object-fit:cover; }
+.gal-modal-caption {
+  text-align:center; color:rgba(255,255,255,.55);
+  font-size:.88rem; margin-top:.8rem; letter-spacing:.05em;
+}
+.gal-modal-nav {
+  display:flex; justify-content:center; gap:1rem; margin-top:1rem;
+}
+.gal-modal-nav button {
+  padding:.55rem 1.6rem; border-radius:50px;
+  background:rgba(158,13,133,.2); border:1.5px solid rgba(158,13,133,.3);
+  color:rgba(255,255,255,.7); font-family:'Outfit',sans-serif;
+  font-size:.84rem; cursor:pointer; transition:all .2s;
+}
+.gal-modal-nav button:hover { background:var(--coral); color:#fff; border-color:transparent; }
+
+.graphics-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.5rem; margin-top:1rem;
+}
+.graphic-card {
+  border-radius:18px; overflow:hidden;
+  border:1.5px solid rgba(212,100,122,.1);
+  background:var(--warm-white);
+  transition:transform .3s, box-shadow .3s;
+}
+.graphic-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(212,100,122,.15); }
+.graphic-thumb {
+  width:100%; aspect-ratio:4/3;
+  display:flex; align-items:center; justify-content:center;
+  font-size:3rem; position:relative; overflow:hidden;
+}
+.gt1 { background:linear-gradient(135deg,#150708,#9E0D85); }
+.gt2 { background:linear-gradient(135deg,#0D2E9E,#C940AA); }
+.gt3 { background:linear-gradient(135deg,#F39F5F,#9E0D85); }
+.gt4 { background:linear-gradient(135deg,#C940AA,#0D7B9E); }
+.gt5 { background:linear-gradient(135deg,#150708,#F39F5F); }
+.gt6 { background:linear-gradient(135deg,#3A1020,#C940AA,#F7B87A); }
+.graphic-info { padding:1.2rem; }
+.graphic-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; color:var(--plum); margin-bottom:.3rem; }
+.graphic-sub { font-size:.8rem; color:var(--muted); }
+/* ── Graphic Card interactive ── */
+.graphic-thumb { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.g-emoji { font-size:3rem; display:block; transition:transform .35s; }
+.graphic-card:hover .g-emoji { transform:scale(1.2); }
+.g-hover-hint {
+  position:absolute; inset:0; background:rgba(21,7,8,.72);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.8rem; font-weight:600; color:rgba(255,255,255,.88);
+  letter-spacing:.06em; opacity:0; transition:opacity .3s;
+}
+.graphic-card:hover .g-hover-hint { opacity:1; }
+.g-arrow {
+  width:34px; height:34px; border-radius:50%; flex-shrink:0;
+  background:var(--grad-logo); display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:.9rem; transition:transform .25s;
+}
+.graphic-card:hover .g-arrow { transform:scale(1.15) rotate(45deg); }
+
+/* ── Graphic Project Modals ── */
+.gp-modal {
+  display:none; position:fixed; inset:0; z-index:2500;
+  background:rgba(21,7,8,.95); backdrop-filter:blur(18px);
+  overflow-y:auto; padding:2rem 0 5rem;
+}
+.gp-modal.active { display:block; animation:fadeInModal .32s ease; }
+.gp-inner {
+  max-width:820px; margin:0 auto; padding:2.5rem 5%;
+}
+.gp-close {
+  float:right; width:42px; height:42px; border-radius:50%;
+  background:rgba(158,13,133,.25); border:1.5px solid rgba(158,13,133,.45);
+  color:#fff; font-size:1.3rem; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s; margin-bottom:1rem;
+}
+.gp-close:hover { background:var(--coral); transform:scale(1.1) rotate(90deg); }
+.gp-hero-badge {
+  width:86px; height:86px; border-radius:22px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.8rem; margin-bottom:1.5rem;
+  box-shadow:0 14px 44px rgba(158,13,133,.4);
+  clear:both;
+}
+.gp-meta-row { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1rem; }
+.gp-pill {
+  padding:.28em .9em; border-radius:20px; font-size:.68rem;
+  font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  background:rgba(158,13,133,.18); color:var(--coral-lt);
+  border:1px solid rgba(158,13,133,.22);
+}
+.gp-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.7rem,3.8vw,2.5rem); font-weight:600;
+  color:#fff; line-height:1.1; margin-bottom:1rem;
+}
+.gp-desc { color:rgba(255,255,255,.6); line-height:1.9; font-size:.93rem; margin-bottom:2rem; }
+.gp-visuals-label {
+  font-size:.66rem; font-weight:700; letter-spacing:.22em;
+  text-transform:uppercase; color:rgba(255,255,255,.28); margin-bottom:1rem;
+}
+.gp-visuals-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  grid-auto-rows:190px; gap:1rem; margin-bottom:2rem;
+}
+.gp-img-slot {
+  border-radius:14px; overflow:hidden;
+  border:1.5px dashed rgba(158,13,133,.22);
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .25s;
+}
+.gp-img-slot:hover { border-color:rgba(158,13,133,.55); }
+.gp-img-slot img { width:100%; height:100%; object-fit:cover; display:block; }
+.gp-wide { grid-column:span 2; }
+.gp-slot-inner { display:flex; flex-direction:column; align-items:center; gap:.5rem; text-align:center; padding:1rem; }
+.gp-slot-icon { font-size:2rem; opacity:.38; }
+.gp-slot-hint { font-size:.7rem; color:rgba(255,255,255,.25); line-height:1.65; }
+.gp-slot-hint code {
+  display:block; margin-top:.3rem; font-size:.65rem;
+  background:rgba(158,13,133,.14); color:var(--coral-lt);
+  padding:.15em .5em; border-radius:4px;
+}
+.gp-details-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr));
+  gap:.8rem; margin-bottom:2.2rem;
+}
+.gp-detail-card {
+  background:rgba(255,255,255,.045); border:1px solid rgba(158,13,133,.13);
+  border-radius:12px; padding:1rem 1.1rem;
+  font-size:.83rem; color:rgba(255,255,255,.6); line-height:1.65;
+}
+.gp-detail-card strong {
+  display:block; color:#fff; font-size:.75rem;
+  font-weight:700; letter-spacing:.1em; margin-bottom:.35rem; text-transform:uppercase;
+}
+.gp-actions {
+  display:flex; gap:1rem; flex-wrap:wrap; align-items:center;
+  padding-top:1.6rem; border-top:1px solid rgba(158,13,133,.14);
+}
+.gp-behance-btn {
+  display:inline-flex; align-items:center; gap:.55rem;
+  background:var(--grad-logo); color:#fff; border-radius:50px;
+  padding:.88rem 2.2rem; font-size:.88rem; font-weight:700;
+  text-decoration:none; letter-spacing:.05em;
+  transition:transform .2s, box-shadow .2s; font-family:'Outfit',sans-serif;
+  box-shadow:0 6px 24px rgba(158,13,133,.35);
+}
+.gp-behance-btn:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(158,13,133,.5); }
+.gp-close-btn {
+  padding:.88rem 1.8rem; border-radius:50px;
+  background:transparent; border:1.5px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.45); font-family:'Outfit',sans-serif;
+  font-size:.88rem; cursor:pointer; transition:all .25s;
+}
+.gp-close-btn:hover { border-color:rgba(255,255,255,.3); color:rgba(255,255,255,.8); }
+@media(max-width:600px){
+  .gp-visuals-grid { grid-template-columns:1fr; grid-auto-rows:160px; }
+  .gp-wide { grid-column:span 1; }
+}
+.behance-cta {
+  text-align:center; margin-top:2.5rem;
+}
+.behance-cta {
+  text-align:center; margin-top:2.5rem;
+}
+.behance-cta a {
+  display:inline-flex; align-items:center; gap:.6rem;
+  background:var(--grad-logo); color:#fff; border-radius:50px;
+  padding:.9rem 2.4rem; font-size:.9rem; font-weight:600;
+  text-decoration:none; letter-spacing:.05em;
+  transition:transform .2s, box-shadow .2s;
+}
+.behance-cta a:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(212,100,122,.45); }
+</style>
+
+<!-- Case Study: Pregnancy Awareness -->
+<div class="cs-modal" id="modal-pregnancy">
+  <div class="cs-inner">
+    <div class="cs-close" onclick="closeCase('pregnancy')">✕</div>
+    <span class="tag-pill">Case Study</span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:#fff;line-height:1.1;margin:.6rem 0 .4rem;">Pregnancy Awareness Application</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem;">
+      <span class="cs-pill">Health &amp; Wellness</span>
+      <span class="cs-pill">Mobile UX</span>
+      <span class="cs-pill">Awareness App</span>
+      <span class="cs-pill">Figma</span>
+      <span class="cs-pill">Illustrator</span>
+    </div>
+    <div class="cs-hero-img" ><img src="images/Nest.png" alt="Pregnancy Banner" style="width:100%;
+              height:100%;
+              object-fit:cover;
+              position:absolute;
+              top:0;
+              left:0;" >
+      <div style="position:absolute;bottom:1.2rem;left:0;right:0;text-align:center;font-family:'Outfit',sans-serif;font-size:.65rem;letter-spacing:.25em;color:rgba(255,255,255,.5);text-transform:uppercase;">Pregnancy Awareness · Sonali Hassa · 2025</div>
+    </div>
+    <div class="cs-meta">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-val">UI/UX Designer (Solo)</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-val">Mobile (Android & iOS)</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Published</span><span class="cs-meta-val">October 2025</span></div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Project Overview</h3>
+      <p>The Pregnancy Awareness Application is a compassionate mobile platform designed to support expecting mothers throughout their pregnancy journey. The app addresses a critical gap in accessible, reliable health information for pregnant women — especially in semi-urban and rural areas of India where doctor consultations may be infrequent. The goal was to create an experience that feels warm, trustworthy, and empowering rather than clinical and overwhelming.</p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Problem Statement</h3>
+      <p>Many first-time mothers in India struggle with unreliable information sources, anxiety about their pregnancy stages, and lack of clarity around nutrition, symptoms, and warning signs. Existing health apps are either too clinical, English-heavy, or not designed for users with limited tech literacy. The design challenge was: <em style="color:var(--coral-lt);">How do we build a pregnancy companion that is informative yet deeply human?</em></p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Design Process</h3>
+      <div class="cs-timeline">
+        <div class="cs-step"><strong>1. Research &amp; Empathy Mapping</strong>Conducted secondary research on maternal health literacy gaps in India. Created user personas including first-time mothers (ages 22–32), their concerns, digital literacy levels, and emotional states during pregnancy.</div>
+        <div class="cs-step"><strong>2. Information Architecture</strong>Mapped the full pregnancy journey (Week 1–40) into digestible sections — weekly milestones, symptom trackers, nutrition guides, appointment reminders, and emergency red-flag alerts.</div>
+        <div class="cs-step"><strong>3. Visual Language</strong>Chose a warm, pastel palette with soft purples and peaches to evoke calm and safety. Used custom illustrations (Adobe Illustrator) to represent pregnancy stages with cultural sensitivity and body diversity.</div>
+        <div class="cs-step"><strong>4. Wireframing &amp; Prototyping</strong>Built low-fidelity wireframes in Figma, then evolved them to high-fidelity screens with micro-interactions and animated transitions using JITTER.</div>
+        <div class="cs-step"><strong>5. Key Screens Designed</strong>Onboarding flow, weekly milestone cards, symptom diary, nutrition tracker, appointment scheduler, and emergency contact panel.</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Key Design Decisions</h3>
+      <div class="cs-cards">
+        <div class="cs-card"><strong>🎨 Warm Visual Language</strong>Pastel gradients and custom illustrations replace harsh medical iconography — creating an emotional connection rather than clinical detachment.</div>
+        <div class="cs-card"><strong>📅 Week-by-Week Journey</strong>Breaking 40 weeks into digestible milestones reduces anxiety and helps users understand exactly where they are in their journey.</div>
+        <div class="cs-card"><strong>🌐 Accessibility-First</strong>Large tap targets, high-contrast text, and illustrated content support users with low literacy levels and diverse tech comfort zones.</div>
+        <div class="cs-card"><strong>⚠️ Emergency Signals</strong>Red-flag symptom alerts are prominently designed and immediately actionable, prioritizing maternal safety.</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Screen Highlights</h3>
+      <div class="cs-img-grid">
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(201,64,170,.25),rgba(243,159,95,.15));">🌸</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(243,159,95,.25),rgba(158,13,133,.15));">📅</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(158,13,133,.2),rgba(201,64,170,.2));">🥗</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(247,184,122,.2),rgba(201,64,170,.2));">💊</div>
+      </div>
+      <p style="margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.35);text-align:center;">View full screens and interactions on Behance →</p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Outcome &amp; Learnings</h3>
+      <p>This project deepened my understanding of designing for emotionally sensitive contexts. The biggest learning was balancing information density with emotional tone — too much data causes anxiety, too little feels patronising. I developed a strong system of visual hierarchy, progressive disclosure, and illustration-based communication that I now apply across projects.</p>
+    </div>
+
+    <div style="text-align:center;">
+      <a href="https://www.behance.net/gallery/235855295/Pregnancy-Awareness-Application" target="_blank" class="cs-behance-btn">View Full Project on Behance ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- Case Study: JobSeva -->
+<div class="cs-modal" id="modal-jobseva">
+  <div class="cs-inner">
+    <div class="cs-close" onclick="closeCase('jobseva')">✕</div>
+    <span class="tag-pill">Case Study</span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:#fff;line-height:1.1;margin:.6rem 0 .4rem;">JobSeva App</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem;">
+      <span class="cs-pill">Employment</span>
+      <span class="cs-pill">Social Impact</span>
+      <span class="cs-pill">Mobile UX</span>
+      <span class="cs-pill">Figma</span>
+    </div>
+    <div class="cs-hero-img" style="background:linear-gradient(135deg,#150708,#9E0D85,#F39F5F);">💼
+      <div style="position:absolute;bottom:1.2rem;left:0;right:0;text-align:center;font-family:'Outfit',sans-serif;font-size:.65rem;letter-spacing:.25em;color:rgba(255,255,255,.5);text-transform:uppercase;">JobSeva · Sonali Hassa · 2025</div>
+    </div>
+    <div class="cs-meta">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-val">UI/UX Designer (Solo)</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-val">Figma · Adobe XD</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-val">Mobile (Android-first)</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Focus</span><span class="cs-meta-val">Blue-collar Workers</span></div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Project Overview</h3>
+      <p>JobSeva ("Seva" meaning service/help in Hindi) is a mobile job-matching application designed specifically for India's massive informal and blue-collar workforce — daily wage workers, domestic helpers, construction workers, delivery personnel, and small-trade artisans. The app aims to connect them with local employers through a simple, accessible, and language-inclusive interface.</p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Problem Statement</h3>
+      <p>Over 400 million informal workers in India lack access to formal job platforms. Existing platforms (LinkedIn, Naukri) assume high literacy, English fluency, and white-collar contexts. The challenge: <em style="color:var(--coral-lt);">How might we design a job platform that genuinely works for someone with a Class 8 education, a low-end Android phone, and limited data?</em></p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Design Process</h3>
+      <div class="cs-timeline">
+        <div class="cs-step"><strong>1. User Research</strong>Studied secondary data on informal sector employment patterns in India. Developed personas — Ramu (construction worker, 34, no smartphone experience) and Priya (domestic helper, 28, basic WhatsApp user).</div>
+        <div class="cs-step"><strong>2. Competitive Analysis</strong>Analysed platforms like Apna, WorkIndia, and OLX Jobs — identifying gaps in regional language support, voice-based input, and offline capability.</div>
+        <div class="cs-step"><strong>3. Information Architecture</strong>Stripped down to the essentials: Profile setup → Browse local jobs → One-tap apply → WhatsApp connect. Every extra step was a potential dropout point.</div>
+        <div class="cs-step"><strong>4. Visual Design</strong>Bold, high-contrast interface with icon-heavy navigation. Minimal text reliance. Local context imagery. Prominent CTA buttons with clear affordances.</div>
+        <div class="cs-step"><strong>5. Key Screens</strong>Onboarding with skill-based profile, location-based job feed, job detail cards, application confirmation, and employer profile.</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Key Design Decisions</h3>
+      <div class="cs-cards">
+        <div class="cs-card"><strong>🗣️ Icon-First Navigation</strong>Reduced text dependency by using universally understood icons and illustrations — enabling non-literate users to navigate effectively.</div>
+        <div class="cs-card"><strong>📍 Hyper-Local Focus</strong>Jobs filtered by walking/commuting distance first — because informal workers cannot afford long commutes or relocations.</div>
+        <div class="cs-card"><strong>📲 WhatsApp Integration</strong>One-tap connection to employers via WhatsApp — the de facto communication tool for this demographic.</div>
+        <div class="cs-card"><strong>⚡ Minimal Load</strong>Lightweight design optimised for 2G/3G connections and entry-level Android devices with limited storage.</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Screen Highlights</h3>
+      <div class="cs-img-grid">
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(21,7,8,.6),rgba(158,13,133,.3));">🏠</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(158,13,133,.3),rgba(243,159,95,.2));">🔍</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(243,159,95,.25),rgba(21,7,8,.5));">📋</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(201,64,170,.2),rgba(13,46,158,.2));">✅</div>
+      </div>
+      <p style="margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.35);text-align:center;">View full screens on Behance →</p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Outcome &amp; Learnings</h3>
+      <p>JobSeva pushed me to design without assumptions. Stripping away everything non-essential taught me that great UX is often about what you remove, not what you add. The project reinforced my belief in designing for the margins — when a product works for the most constrained user, it works beautifully for everyone.</p>
+    </div>
+
+    <div style="text-align:center;">
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="cs-behance-btn">View Portfolio on Behance ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- Case Study: Easy Loan -->
+<div class="cs-modal" id="modal-easyloan">
+  <div class="cs-inner">
+    <div class="cs-close" onclick="closeCase('easyloan')">✕</div>
+    <span class="tag-pill">Case Study</span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:#fff;line-height:1.1;margin:.6rem 0 .4rem;">Easy Loan App</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem;">
+      <span class="cs-pill">FinTech</span>
+      <span class="cs-pill">Trust Design</span>
+      <span class="cs-pill">Mobile UX</span>
+      <span class="cs-pill">Figma</span>
+    </div>
+    <div class="cs-hero-img" style="background:linear-gradient(135deg,#0D2E9E,#0D7B9E,#F39F5F);">💰
+      <div style="position:absolute;bottom:1.2rem;left:0;right:0;text-align:center;font-family:'Outfit',sans-serif;font-size:.65rem;letter-spacing:.25em;color:rgba(255,255,255,.5);text-transform:uppercase;">Easy Loan · Sonali Hassa · 2025</div>
+    </div>
+    <div class="cs-meta">
+      <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-val">UI/UX Designer (Solo)</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-val">Figma · Prototyping</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-val">Mobile (iOS &amp; Android)</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">Domain</span><span class="cs-meta-val">FinTech / Lending</span></div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Project Overview</h3>
+      <p>Easy Loan is a mobile lending app designed to simplify the personal loan application process for first-time borrowers in India. The FinTech space is rife with predatory UX patterns — hidden charges, anxiety-inducing interfaces, and deliberate complexity that benefits lenders. Easy Loan was designed around the opposite philosophy: radical transparency, reduced anxiety, and genuine user empowerment.</p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Problem Statement</h3>
+      <p>First-time loan applicants in India face multiple pain points: confusing eligibility criteria, hidden fee structures, unclear EMI calculations, and opaque approval processes. The result is anxiety, abandonment, and exploitation by informal money lenders. The challenge: <em style="color:var(--coral-lt);">How do we design a loan app that users trust before they've even submitted an application?</em></p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Design Process</h3>
+      <div class="cs-timeline">
+        <div class="cs-step"><strong>1. Heuristic Research</strong>Evaluated 5 existing lending apps against Nielsen's heuristics. Identified key failure points: error prevention, user control, and visibility of system status were consistently poor.</div>
+        <div class="cs-step"><strong>2. Trust Architecture</strong>Designed a "trust ladder" — each screen had to earn the user's confidence before asking for sensitive information. Defined what trustworthy microinteractions look like in a financial context.</div>
+        <div class="cs-step"><strong>3. EMI Calculator First</strong>Put the loan calculator at the very top of the experience — let users understand cost before commitment. Transparent sliders for amount, tenure, and interest.</div>
+        <div class="cs-step"><strong>4. Step-by-Step Application</strong>Broke the multi-page application into a clearly-labelled progress journey — users always know how many steps remain and can go back freely.</div>
+        <div class="cs-step"><strong>5. Approval &amp; Disbursement UX</strong>Designed reassuring confirmation states, real-time status updates, and a clear disbursement timeline — converting the most anxious part of the process into a calm, guided experience.</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Key Design Decisions</h3>
+      <div class="cs-cards">
+        <div class="cs-card"><strong>🔐 Transparency First</strong>All fees, interest rates, and total repayment shown upfront — no "learn more" hiding critical information.</div>
+        <div class="cs-card"><strong>📊 Live EMI Calculator</strong>Interactive sliders let users explore loan options before application — reduces cognitive load and builds confidence.</div>
+        <div class="cs-card"><strong>🚦 Progress Indicators</strong>Clear, stepped progress bars remove uncertainty — users always know where they are and what's next.</div>
+        <div class="cs-card"><strong>💬 Plain Language</strong>All financial jargon replaced with plain, conversational language — no legal-speak in user-facing text.</div>
+      </div>
+    </div>
+
+    <div class="cs-section">
+      <h3>Screen Highlights</h3>
+      <div class="cs-img-grid">
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(13,46,158,.3),rgba(13,123,158,.2));">🏦</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(13,123,158,.3),rgba(243,159,95,.2));">📊</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(243,159,95,.25),rgba(13,46,158,.3));">📝</div>
+        <div class="cs-img-placeholder" style="background:linear-gradient(145deg,rgba(13,46,158,.2),rgba(201,64,170,.2));">✅</div>
+      </div>
+      <p style="margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.35);text-align:center;">View full screens on Behance →</p>
+    </div>
+
+    <div class="cs-section">
+      <h3>Outcome &amp; Learnings</h3>
+      <p>Designing for FinTech taught me that trust is not a visual quality — it's an architectural one. Every decision about information hierarchy, microcopy, and interaction sequencing either builds or erodes user confidence. The project gave me a deep appreciation for ethical design and the immense responsibility designers hold in financial products.</p>
+    </div>
+
+    <div style="text-align:center;">
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="cs-behance-btn">View Portfolio on Behance ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GALLERY — Travel & Stories ═══ -->
+<section id="gallery">
+  <div class="sec-header reveal">
+    <span class="tag-pill">Gallery</span>
+    <h2>Travels &amp; <span>Stories</span></h2>
+    <p class="sec-sub">Places I've wandered, moments I've captured — a visual diary of my adventures.</p>
+  </div>
+
+  <div class="gallery-grid">
+    <!-- Slot 1 — tall card -->
+    <div class="gal-card gal-tall reveal" onclick="openGalModal(0)">
+      <div class="gal-thumb" > <img src="images/Himachal.jpeg" alt="Himachal">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍 Himachal Pradesh</span><span class="gal-caption">JIBHI Valley </span></div>
+    </div>
+    <!-- Slot 2 -->
+    <div class="gal-card reveal" onclick="openGalModal(1)">
+      <div class="gal-thumb"><img src="images/Daisy.jpeg" alt="Daisy">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍Garden</span><span class="gal-caption">☘️a little lost, a little found</span></div>
+    </div>
+    <!-- Slot 3 -->
+    <div class="gal-card reveal" onclick="openGalModal(2)">
+      <div class="gal-thumb"><img src="images/Purple Evening.jpeg">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍 Sunset View</span><span class="gal-caption">Add your caption here</span></div>
+    </div>
+    <!-- Slot 4 — wide card -->
+    <div class="gal-card gal-wide reveal" onclick="openGalModal(3)">
+      <div class="gal-thumb" ><img src="images/Plane.jpeg">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍 Heritage / Architecture</span><span class="gal-caption">Add your caption here</span></div>
+    </div>
+    <!-- Slot 5 -->
+    <div class="gal-card reveal" onclick="openGalModal(4)">
+      <div class="gal-thumb"><img src="images/meRain.jpeg">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍 Nature / Forests</span><span class="gal-caption">Add your caption here</span></div>
+    </div>
+    <!-- Slot 6 -->
+    <div class="gal-card reveal" onclick="openGalModal(5)">
+      <div class="gal-thumb" ><img src="images/Diwali1.jpeg">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍 City Lights</span><span class="gal-caption">Add your caption here</span></div>
+    </div>
+    <!-- Slot 7 -->
+    <div class="gal-card reveal" onclick="openGalModal(6)">
+      <div class="gal-thumb" ><img src="images/Ramen.jpeg">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍 Local Food</span><span class="gal-caption">Add your caption here</span></div>
+    </div>
+    <!-- Slot 8 — tall card -->
+    <div class="gal-card gal-tall reveal" onclick="openGalModal(7)">
+      <div class="gal-thumb"><img src="images/Lotus.jpeg">
+        <div class="gal-overlay"><span class="gal-add-hint">📸 Add your photo</span></div>
+      </div>
+      <div class="gal-info"><span class="gal-loc">📍 Roads & Journeys</span><span class="gal-caption">Add your caption here</span></div>
+    </div>
+  </div>
+
+  <p class="gallery-note reveal">JESUS IS KING<code>src</code> attribute of each card's <code>&lt;img&gt;</code> element.</p>
+</section>
+
+<!-- Gallery lightbox modal -->
+<div class="gal-modal" id="gal-modal" onclick="closeGalModal()">
+  <div class="gal-modal-inner" onclick="event.stopPropagation()">
+    <button class="gal-close" onclick="closeGalModal()">✕</button>
+    <div class="gal-modal-img" id="gal-modal-img"></div>
+    <div class="gal-modal-caption" id="gal-modal-caption"></div>
+    <div class="gal-modal-nav">
+      <button onclick="navGal(-1)">← Prev</button>
+      <button onclick="navGal(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-left reveal">
+      <span class="tag-pill" style="background:rgba(212,100,122,.2);color:#E8899A;">Get in Touch</span>
+      <h2>Let's create<br>something <em>beautiful</em><br>together.</h2>
+      <p>Open to fresher UX/UI internships and junior designer roles across Delhi, Noida, Gurugram, Kolkata, and Jharkhand. Let's talk.</p>
+      <div class="cinfo">
+        <div class="cinfo-row"><div class="cinfo-icon">📍</div>Ranchi, Jharkhand, India (Open to Relocation)</div>
+        <div class="cinfo-row"><div class="cinfo-icon">📧</div><a href="mailto:hassasonalin07@gmail.com" style="color:rgba(255,255,255,.65);text-decoration:none;">hassasonali@gmail.com</a></div>
+        <div class="cinfo-row"><div class="cinfo-icon">📞</div><a href="tel:+9190650388667" style="color:rgba(255,255,255,.65);text-decoration:none;">+91 9065038867</a></div>
+        <div class="cinfo-row"><div class="cinfo-icon">🎓</div>BDes Interaction Design · LPU (2027)</div>
+        <div class="cinfo-row"><div class="cinfo-icon">💼</div>Available for Internships &amp; Fresher Roles</div>
+        <div class="cinfo-row"><div class="cinfo-icon">🛠️</div>Figma · Illustrator · Photoshop · HTML/CSS</div>
+      </div>
+    </div>
+
+    <div class="cform reveal">
+      <div class="form-row-2">
+        <div class="fg"><label>First Name</label><input type="text" placeholder="Your name" id="fname"/></div>
+        <div class="fg"><label>Last Name</label><input type="text" placeholder="Last name"/></div>
+      </div>
+      <div class="fg"><label>Email Address</label><input type="email" placeholder="you@company.com" id="femail"/></div>
+      <div class="fg"><label>Subject</label><input type="text" placeholder="Internship opportunity / Collaboration"/></div>
+      <div class="fg"><label>Message</label><textarea rows="5" placeholder="Tell me about your project or opportunity..."></textarea></div>
+      <button class="btn btn-primary" id="sendBtn" style="border:none;font-family:'Outfit',sans-serif;width:100%;font-size:.95rem;padding:1rem;">
+        Send Message ✉️
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="foot-top">
+    <div>
+      <div class="foot-logo" style="background:#150708;border-radius:8px;padding:4px 10px;display:inline-block;">
+        <img src="images/Group 945.png" alt="My Image"> </div>
+      <div class="foot-tagline">UX/UI Designer · Crafting experiences with empathy</div>
+    </div>
+    <ul class="foot-nav">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#graphics">Graphics</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="foot-socials">
+      <a href="https://linkedin.com/in/sonali-hassa" target="_blank" class="fsoc">in</a>
+      <a href="https://www.behance.net/sonalihassa" target="_blank" class="fsoc">Be</a>
+      <a href="http://instagram.com/_sona.o7designcafe_" target="_blank" class="fsoc">Ig</a>
+      <a href="mailto:hassasonali@gmail.com" class="fsoc">✉</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-copy">© 2025 Sonali. All rights reserved.</div>
+    <div class="foot-made">Designed with <span>♥</span> & crafted with code</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✅ Message sent! I'll reply soon.</div>
+
+<script>
+/* ══════════════════════════════════════
+   FLUID WAVY CURSOR — Canvas-based
+══════════════════════════════════════ */
+const canvas = document.getElementById('cursor-canvas');
+const ctx    = canvas.getContext('2d');
+const cdot   = document.getElementById('cdot');
+
+let W, H;
+function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+
+/* Snake of points that follows mouse */
+const POINTS = 22;
+const points = Array.from({length:POINTS}, () => ({x:W/2, y:H/2}));
+let mx = W/2, my = H/2;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+/* Color stops from logo */
+const COLORS = ['#9E0D85','#C940AA','#F39F5F','#F7B87A','#C940AA','#9E0D85'];
+
+function lerp(a,b,t){ return a+(b-a)*t; }
+
+function drawFluidCursor(){
+  ctx.clearRect(0,0,W,H);
+
+  /* Move dot instantly */
+  cdot.style.left = mx+'px';
+  cdot.style.top  = my+'px';
+
+  /* Chain of points with spring follow */
+  points[0].x = lerp(points[0].x, mx, .28);
+  points[0].y = lerp(points[0].y, my, .28);
+  for(let i=1;i<POINTS;i++){
+    points[i].x = lerp(points[i].x, points[i-1].x, .32);
+    points[i].y = lerp(points[i].y, points[i-1].y, .32);
+  }
+
+  /* Draw the wavy tail as a tapered gradient stroke */
+  for(let i=1;i<POINTS;i++){
+    const t   = 1 - i/POINTS;
+    const r   = t * 9;   /* radius tapers */
+    const p0  = points[i-1];
+    const p1  = points[i];
+
+    /* Cardinal spline midpoint for smooth curves */
+    const mx0 = (i>1) ? points[i-2].x : p0.x;
+    const my0 = (i>1) ? points[i-2].y : p0.y;
+    const cpx = p0.x + (p1.x - mx0)*.2;
+    const cpy = p0.y + (p1.y - my0)*.2;
+
+    const grd = ctx.createLinearGradient(p0.x, p0.y, p1.x, p1.y);
+    const ci  = Math.floor((i/POINTS)*(COLORS.length-1));
+    grd.addColorStop(0, hexAlpha(COLORS[ci], t*.65));
+    grd.addColorStop(1, hexAlpha(COLORS[Math.min(ci+1,COLORS.length-1)], t*.35));
+
+    ctx.beginPath();
+    ctx.moveTo(p0.x, p0.y);
+    ctx.quadraticCurveTo(cpx, cpy, p1.x, p1.y);
+    ctx.strokeStyle = grd;
+    ctx.lineWidth   = r * 2;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+    ctx.shadowColor = COLORS[ci];
+    ctx.shadowBlur  = r * 3;
+    ctx.stroke();
+    ctx.shadowBlur  = 0;
+  }
+
+  /* Glowing head circle */
+  const headGrd = ctx.createRadialGradient(points[0].x, points[0].y, 0, points[0].x, points[0].y, 14);
+  headGrd.addColorStop(0,'rgba(158,13,133,.7)');
+  headGrd.addColorStop(1,'rgba(158,13,133,0)');
+  ctx.beginPath();
+  ctx.arc(points[0].x, points[0].y, 14, 0, Math.PI*2);
+  ctx.fillStyle = headGrd;
+  ctx.fill();
+
+  requestAnimationFrame(drawFluidCursor);
+}
+drawFluidCursor();
+
+function hexAlpha(hex, a){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+/* Hover effect */
+document.querySelectorAll('a,button,.proj-card,.t-item,.fsoc,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+
+/* ── Nav scroll ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>50);
+});
+
+/* ── Scroll reveal ── */
+const revEls = document.querySelectorAll('.reveal');
+const ro = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*100); });
+},{threshold:.1});
+revEls.forEach(r=>ro.observe(r));
+
+/* ── Active nav ── */
+const secs = document.querySelectorAll('section[id]');
+const nLinks = document.querySelectorAll('.nav-links a');
+const ao = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      nLinks.forEach(a=>a.style.color='');
+      const act = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+      if(act) act.style.color='var(--coral)';
+    }
+  });
+},{threshold:.5});
+secs.forEach(s=>ao.observe(s));
+/* ── Graphic Project Modals ── */
+function openGraphic(id){
+  const m = document.getElementById('gp-'+id);
+  if(m){ m.classList.add('active'); document.body.style.overflow='hidden'; }
+}
+function closeGraphic(id){
+  const m = document.getElementById('gp-'+id);
+  if(m){ m.classList.remove('active'); document.body.style.overflow=''; }
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.querySelectorAll('.gp-modal.active').forEach(m=>{m.classList.remove('active');});
+    document.querySelectorAll('.cs-modal.active').forEach(m=>{m.classList.remove('active');});
+    document.getElementById('gal-modal')?.classList.remove('open');
+    document.body.style.overflow='';
+  }
+});
+/* ── Tab Switcher ── */
+function switchTab(id, btn){
+  document.querySelectorAll('.proj-pane').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.proj-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).style.display='block';
+  btn.classList.add('active');
+}
+/* ── Gallery Lightbox ── */
+const galData = [
+  {icon:'🏔️', loc:'Mountains', caption:'Add your caption here'},
+  {icon:'🌊', loc:'Beach / River', caption:'Add your caption here'},
+  {icon:'🌅', loc:'Sunset View', caption:'Add your caption here'},
+  {icon:'🏛️', loc:'Heritage / Architecture', caption:'Add your caption here'},
+  {icon:'🌿', loc:'Nature / Forests', caption:'Add your caption here'},
+  {icon:'🌃', loc:'City Lights', caption:'Add your caption here'},
+  {icon:'🍜', loc:'Local Food', caption:'Add your caption here'},
+  {icon:'🛤️', loc:'Roads & Journeys', caption:'Add your caption here'},
+];
+let currentGal = 0;
+function openGalModal(i){
+  currentGal = i;
+  renderGal();
+  document.getElementById('gal-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeGalModal(){
+  document.getElementById('gal-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function navGal(dir){
+  currentGal = (currentGal + dir + galData.length) % galData.length;
+  renderGal();
+}
+function renderGal(){
+  const d = galData[currentGal];
+  document.getElementById('gal-modal-img').innerHTML = `<span style="font-size:5rem">${d.icon}</span>`;
+  document.getElementById('gal-modal-caption').textContent = `📍 ${d.loc} — ${d.caption}`;
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight') navGal(1);
+  if(e.key==='ArrowLeft') navGal(-1);
+});
+
+
+function openCase(id){
+  const m = document.getElementById('modal-'+id);
+  if(m){ m.classList.add('active'); document.body.style.overflow='hidden'; }
+}
+function closeCase(id){
+  const m = document.getElementById('modal-'+id);
+  if(m){ m.classList.remove('active'); document.body.style.overflow=''; }
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.cs-modal.active').forEach(m=>{ m.classList.remove('active'); document.body.style.overflow=''; }); });
+
+
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  const n=document.getElementById('fname').value.trim();
+  const e=document.getElementById('femail').value.trim();
+  if(!n||!e){showToast('⚠️ Please fill in name & email.');return;}
+  showToast('✅ Message sent! I\'ll reply soon.');
+});
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+/* ── Modal functions ── */
+function openCase(id){
+  const m = document.getElementById('modal-'+id);
+  if(m){ m.classList.add('active'); document.body.style.overflow='hidden'; }
+}
+function closeCase(id){
+  const m = document.getElementById('modal-'+id);
+  if(m){ m.classList.remove('active'); document.body.style.overflow=''; }
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.cs-modal.active').forEach(m=>{ m.classList.remove('active'); document.body.style.overflow=''; }); });
+
+
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  const n=document.getElementById('fname').value.trim();
+  const e=document.getElementById('femail').value.trim();
+  if(!n||!e){showToast('⚠️ Please fill in name & email.');return;}
+  showToast('✅ Message sent! I\'ll reply soon.');
+});
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+</script>
+</body>
+</html>
